@@ -1,0 +1,96 @@
+
+{% load filters %}
+
+<article  class="media content-section">
+
+  {% if post.anonymous %}
+    <img class="rounded-circle article-img" src="/media/profile_pics/anonymous.png">
+  {% else %}
+    <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+  {% endif %}
+  <div  class="media-body full-block">
+  <div class="full-block">
+    <div class="article-metadata">
+        {% if post.anonymous %}
+            Anonymous User
+        {% else %}
+            <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+        {% endif %}
+      <small class="text-muted" style="float:right;">{{ post.date_posted|date:"F d, Y P" }}</small>
+      {% if post.author == user and editable == True %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
+          </div>
+      {% endif %}
+    </div>
+    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+    <p class="article-content">{{ post.content }}</p>
+  </div>
+  <div class="full-block small">
+      <div class="">
+          <a href="javascript:$('#div_tag_{{ post.id }}').show()">Add Tag</a>
+      {% if post.tags.all %}
+          <div class="margin-top-10">
+          {% for t in post.tags.all %}
+              <span id="tag_{{ post.id }}_{{ t.id }}" style="border: solid 1px grey;padding:0px 5px 0px 5px;" class="margin-right-20">
+                  <a href="/tags/{{ t.type.name|remove_hash }}/posts">{{ t.type.name }}</a>
+                  <a class="margin-left-5" href="javascript:delete_tag('{{ post.id }}', '{{ t.id }}', '{{ csrf_token }}')" title="Remove Tag">x</a>
+              </span>
+          {% endfor %}
+          </div>
+      {% endif %}
+          <div id="div_tag_{{ post.id }}" class="display_False margin-top-10">
+              <select id="tag2_{{ post.id }}" class="browser-default custom-select margin-right-10" style="width:150px;">
+{#                  {%  for tag in tag_types %}#}
+{#                    <option value="{{ tag.name }}">{{ tag.name }}</option>#}
+{#                  {% endfor %}#}
+              </select>
+              <a href="javascript:save_tag('{{ post.id }}', '{{ csrf_token }}')" class="margin-right-10">Save Tag</a>
+              <a href="javascript:$('#div_tag_{{ post.id }}').hide()" class="margin-right-10">Cancel</a>
+          </div>
+      </div>
+  </div>
+  <div class="full-block small padding-top-10">
+      <div class="float-left " style="font-weight: bold">Comments</div>
+      {% if user.is_authenticated %}
+      <div class="float-left " style="font-weight: bold;margin-left:20px;">
+        <a id="subscribe_{{ post.id }}" class="display_{{ post|is_user_subscribed:user.id|negate }}"  href="javascript:subscribeMe('{{ post.id }}', '{{ csrf_token }}')">Subscribe</a>
+        <a id="unsubscribe_{{ post.id }}" class="display_{{ post|is_user_subscribed:user.id }}" href="javascript:unSubscribeMe('{{ post.id }}', '{{ csrf_token }}')">Unsubscribe</a>
+      </div>
+
+      <div class="float-right">
+        {% if post.comments.all %}
+          <a id="a_delete_multiple_{{ post.id }}" href="javascript:show_me('div_delete_selected_{{ post.id }}'); setElementVisibilityByPatternStarting('div_comment_checkbox_{{ post.id }}', true);">Delete multiple</a>
+         {% endif %}
+          <a class="margin-left-5" href="javascript:show_me('div_comment_box_{{ post.id}}')">Add Comment</a>
+      </div>
+
+
+
+      <div id  = "div_comment_box_{{ post.id}}" class="display_False">
+        {% include 'blog/comment_box.html' %}
+      </div>
+      {% endif %}
+  </div>
+  <br>
+  <div id="comments_container_{{ post.id }}" class="full-block padding-top-10">
+    {% if post.comments.all %}
+      {% for comment in post.comments.all|dictsortreversed:"date_posted" %}
+        {% include 'blog/comment_detail.html' with comment=comment editable=True %}
+      {% endfor %}
+    {% endif %}
+
+  </div>
+{#  {% if post.comments.all %}#}
+   <div  id="div_delete_selected_{{ post.id }}" class="display_False" >
+      <a class="small" href="javascript:delete_selected_comments('{{ post.id }}','{{ csrf_token }}')">Delete Selected</a>
+      <a class="small margin-left-10" href="javascript:hide_me('div_delete_selected_{{ post.id }}'); setElementVisibilityByPatternStarting('div_comment_checkbox_{{ post.id }}', false);">Cancel</a>
+   </div>
+{#    {% endif %}#}
+
+  </div>
+
+</article>
+
+

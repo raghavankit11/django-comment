@@ -1,0 +1,12 @@
+certifi
+chardet
+Django
+django-crispy-forms
+idna
+Pillow
+pytz
+requests
+urllib3
+django-extensions
+psycopg2
+django-tastypie

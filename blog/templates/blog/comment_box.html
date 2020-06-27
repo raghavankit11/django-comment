@@ -1,0 +1,12 @@
+<textarea cols="30" rows="5" class="textarea form-control" required="" id="txt_comment_{{ post.id }}" placeholder="Write your comment here">
+</textarea>
+
+<div id="div_id_anonymous" class="form-check">
+	 <input type="checkbox" name="anonymous" class="checkboxinput form-check-input" id="chk_anonymous_{{ post.id }}" checked="">
+	 <label for="id_anonymous" class="form-check-label">
+                    Comment as Anonymous User
+	 </label> 
+</div>
+<br>
+<a id="a_{{ post.id }}" style="color:blue;" href="javascript:save_comment('{{ post.id }}', '{{ csrf_token }}')">Save</a>
+<a style="color:blue;margin-left: 10px;"href="javascript:hide_me('div_comment_box_{{ post.id}}')">Cancel</a>

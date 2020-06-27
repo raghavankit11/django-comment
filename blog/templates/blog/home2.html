@@ -1,0 +1,46 @@
+{% extends "blog/base.html" %}
+{% load filters %}
+{% block content %}
+    <select id="ddl_tag_search2" class="browser-default custom-select" onchange="toggleElement(this, 'btn_tag_search')" style="width:70%">
+      <option value="">--Select Tag To Search--</option>
+    </select>
+
+    {% for p in posts %}
+
+        {% include 'blog/post_raw.html' with post=p %}
+
+
+    {% endfor %}
+
+<script>
+
+    $(document).ready(function() {
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/v1/tagtype/"
+        }).then(function (data) {
+            $.each(data.objects, function (i, t) {
+                tt = t.name.replace("#", "");
+                $('#ddl_tag_search2')
+                    .append($("<option></option>")
+                        .attr("value", tt)
+                        .text(t.name));
+                $("[id^='tag2_")
+                    .append($("<option></option>")
+                        .attr("value", t.name)
+                        .text(t.name));
+
+
+        });
+        });
+    });
+
+
+
+    
+
+
+
+
+</script>
+
+  {% endblock content %}

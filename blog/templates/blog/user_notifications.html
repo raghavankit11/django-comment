@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <h1 class="mb-3">Notifications for {{ user }} </h1>
+    {% for n in notifications %}
+        {% include "blog/notification.html" with notification=n %}
+    {% endfor %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#div_notifications').hide();
+        });
+    </script>
+{% endblock content %}
