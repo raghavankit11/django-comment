@@ -195,7 +195,6 @@ function delete_comment(commentId, csrfToken)
     let url = "/comment/" + commentId + "/delete";
     let spinner = $('#spinner_comment_edit_' + commentId);
     spinner.show();
-
     $.ajax({
         type: "POST",
         url: url,
@@ -209,7 +208,9 @@ function delete_comment(commentId, csrfToken)
           spinner.hide();
           if(data.result == true)
           {
+
               $('#comment_detail_' + commentId).remove();
+               $(".modal-backdrop").remove();
           }
         }
       });

@@ -136,6 +136,16 @@ a.article-title:hover {
   margin-left: 5px;
 }
 
+.modal {
+   position: absolute;
+   top: 50%;
+   right: 50%;
+   bottom: 0;
+   left: 0;
+   z-index: 10040;
+   overflow: auto;
+   overflow-y: auto;
+}
 
 
 

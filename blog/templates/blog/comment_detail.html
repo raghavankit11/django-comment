@@ -1,43 +1,57 @@
 <div id="comment_detail_{{ comment.id }}" class="float-left full-block padding-top-20 border-top" >
 
+<div class="modal fade" id="myModal" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Are You Sure?</h4>
+{#        <button type="button" class="close" data-dismiss="modal">&times;</button>#}
+      </div>
+
+
+      <div class="modal-footer">
+        <button class = "btn btn-warning"  onclick = "javascript:delete_comment('{{ comment.id }}', '{{ csrf_token }}')">Delete</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
     <div class="small float-left full-block">
         <div class="float-left">
             {% if comment.author == user %}
-            <div id = "div_comment_checkbox_{{ post.id }}_{{ comment.id }}"  class="display_False">
-             <input type="checkbox"  class="checkboxinput form-check-input" checked="" data-comment-id="{{ comment.id }}">
-            </div>
+                <div id = "div_comment_checkbox_{{ post.id }}_{{ comment.id }}"  class="display_False">
+                <input type="checkbox"  class="checkboxinput form-check-input" checked="" data-comment-id="{{ comment.id }}">
+                </div>
             {% endif %}
-        {% if comment.anonymous %}
-            <img id="img_comment_profile_{{ comment.id }}" class="rounded-circle comment-img" src="/media/profile_pics/anonymous.png">
-            <a id="href_user_comment_{{ comment.id }}" onclick="return false">Anonymous User</a>
-        {% else %}
-            <img id="img_comment_profile_{{ comment.id }}" class="rounded-circle comment-img" src="{{ comment.author.profile.image.url }}">
-            <a id="href_user_comment_{{ comment.id }}" class="mr-2" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a>
-        {% endif %}
-        </div>
-        <div class="float-right">
-            <small id = "date_{{ comment.id }}"  class="text-muted" style="float:right;">{{ comment.date_posted|date:"F d, Y P" }}</small>
-        </div>
+            {% if comment.anonymous %}
+                <img id="img_comment_profile_{{ comment.id }}" class="rounded-circle comment-img" src="/media/profile_pics/anonymous.png">
+                <a id="href_user_comment_{{ comment.id }}" onclick="return false">Anonymous User</a>
+            {% else %}
+                <img id="img_comment_profile_{{ comment.id }}" class="rounded-circle comment-img" src="{{ comment.author.profile.image.url }}">
+                 <a id="href_user_comment_{{ comment.id }}" class="mr-2" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a>
+            {% endif %}
+         </div>
+                <div class="float-right">
+                    <small id = "date_{{ comment.id }}"  class="text-muted" style="float:right;">{{ comment.date_posted|date:"F d, Y P" }}</small>
+                </div>
     </div>
     {% if comment.author == user and editable == True %}
-    <div class="float-left full-block small">
+        <div class="float-left full-block small">
           <div>
             <a href="javascript:hide_me('p_{{ comment.id }}');$('#edit_txt_comment_'+{{comment.id}}).val($('#p_'+{{ comment.id }}).text());show_me('div_edit_comment_box_{{ comment.id}}');">Edit</a>
-            <a style="color:#ff0000;margin-left: 10px;" href="javascript:show_me('xyz_{{ comment.id }}')">Delete</a>
+            <a style="color:#ff0000; margin-left: 10px;" data-toggle="modal" href="#myModal">Delete</a>
             <span id="spinner_comment_edit_{{ comment.id }}" class="margin-left-10" style="display:none" >Processing...</span>
           </div>
 
-    </div>
+        </div>
     {% endif %}
 
 
         <p id ='p_{{comment.id}}'  class="small">{{ comment.content }}</p>
-
-        <div id ="xyz_{{ comment.id }}" class="display_False" >
-            <p>Are you sure?</p>
-            <a style="color:#ff0000" href = "javascript:delete_comment('{{ comment.id }}', '{{ csrf_token }}')">Yes</a>
-            <a style = "margin-left: 10px;" href="javascript:hide_me('div_edit_comment_box_{{ comment.id}}');show_me('p_{{ comment.id }}');">No</a>
-        </div>
 
         <div id  = "div_edit_comment_box_{{ comment.id}}" class="display_False">
             <textarea cols="30" rows="5" class="textarea form-control" required="" id="edit_txt_comment_{{ comment.id }}">

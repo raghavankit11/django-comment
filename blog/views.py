@@ -273,15 +273,15 @@ def tag_delete(request, tag_id):
 
 
 class TagPostsTemplateView(LoginRequiredMixin, TemplateView):
-    template_name = 'blog/tag_posts.html'  # <app>/<model>_<viewtype>.html
+    template_name = 'blog/tag_posts.html'        # <app>/<model>_<viewtype>.html
 
     def get_context_data(self, *, object_list=None, **kwargs):
         choices = self.kwargs['tag_choices']
 
         choices = choices.split('/')
 
-        posts = Post.objects.all() # 1000
-        for choice in choices:  # Financial, #Political
+        posts = Post.objects.all()      # 1000
+        for choice in choices:          # Financial, #Political
             tags = Tag.objects.filter(type__name__exact='#' + choice).all()
             posts = posts.filter(tags__in=[tt.id for tt in tags]).order_by('-date_posted').all()
 
@@ -292,7 +292,7 @@ class TagPostsTemplateView(LoginRequiredMixin, TemplateView):
             for t in p.tags.all():
                 if remove_hash(t.type.name) not in choices:
                     remaining_choices.add(t.type.name)
-            #remaining_choices.append(list(map(lambda t: t.choice if remove_hash(t.choice) in choices else None, p.tags.all())))
+
 
         page_size = 2
         is_paginated = posts.count() > page_size
