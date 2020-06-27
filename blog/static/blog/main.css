@@ -2,6 +2,7 @@ body {
   background: #fafafa;
   color: #333333;
   margin-top: 5rem;
+  font-family: "Cambria",  sans-serif !important;, sans-serif !important;;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -12,8 +13,8 @@ ul {
   margin: 0;
 }
 
-.bg-steel {
-  background-color: #5f788a;
+.bg-ankit {
+  background-color: darkgoldenrod;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -21,7 +22,7 @@ ul {
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
+  color: indigo;
 }
 
 .site-header .navbar-nav .nav-link.active {
